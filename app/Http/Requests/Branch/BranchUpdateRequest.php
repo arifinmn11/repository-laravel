@@ -1,18 +1,18 @@
 <?php
 
-namespace App\Http\Requests;
+namespace App\Http\Requests\Branch;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class BranchCreateRequest extends FormRequest
+class BranchUpdateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
      */
-    // public function authorize(): bool
-    // {
-    //     return false;
-    // }
+    public function authorize(): bool
+    {
+        return false;
+    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -23,7 +23,7 @@ class BranchCreateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'code' => 'required|string|max:100',
+            'code' => ['required|string|max:100', 'unique:branch,code,' . $this->id,],
             'address' => 'required|string|max:255',
             'phone' => 'nullable|string|max:100',
             'email' => 'nullable|string|max:100',
