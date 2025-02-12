@@ -39,4 +39,9 @@ class BranchService
     {
         return $this->branchRepository->getList($limit, $search);
     }
+
+    public function paginationBranch($limit = 10, $search = null, $page = 1)
+    {
+        return $this->branchRepository->getPagination($limit, $search, $page);
+    }
 }

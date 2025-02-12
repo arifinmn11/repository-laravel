@@ -2,17 +2,10 @@
 
 namespace App\Http\Requests\Branch;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseFormRequest;
 
-class BranchCreateRequest extends FormRequest
+class BranchCreateRequest extends BaseFormRequest
 {
-    /**
-     * Determine if the user is authorized to make this request.
-     */
-    public function authorize(): bool
-    {
-        return false;
-    }
 
     /**
      * Get the validation rules that apply to the request.
@@ -23,10 +16,10 @@ class BranchCreateRequest extends FormRequest
     {
         return [
             'name' => 'required|string|max:255',
-            'code' => ['required|string|max:100', 'unique:branch,code'],
+            'code' => 'required|string|max:100|unique:branch,code',
             'address' => 'required|string|max:255',
-            'phone' => 'nullable|string|max:100',
-            'email' => 'nullable|string|max:100',
+            'phone' => 'required|string|max:100',
+            'email' => 'required|string|max:100',
             'is_active' => 'nullable|string|max:100',
         ];
     }

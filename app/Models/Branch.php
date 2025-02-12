@@ -6,6 +6,7 @@ use App\Traits\Uuid;
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Laravel\Scout\Searchable;
 
 class Branch extends Model
 {
@@ -30,4 +31,8 @@ class Branch extends Model
         'id',
     ];
 
+    public static function searchAbleFields(): array
+    {
+        return ['name', 'code', 'address', 'phone', 'email'];
+    }
 }

@@ -10,15 +10,14 @@ class BranchRepository implements BranchIRepository
 {
     public function getPagination($limit = 10, $search = null, $page = 1): LengthAwarePaginator
     {
+
         $query = Branch::when($search, function ($query, $search) {
             return $query->where(function ($query) use ($search) {
-                $query->orwhere('name', 'like', "%$search%")
-                    ->orwhere('code', 'like', "%$search%")
-                    ->orwhere('address', 'like', "%$search%")
-                    ->orwhere('phone', 'like', "%$search%")
-                    ->orwhere('email', 'like', "%$search%");
+                foreach (Branch::searchAbleFields() as $field) {
+                    $query->orWhere($field, 'like', "%$search%");
+                }
             });
-        })->paginate($limit, 'id', $page);
+        })->paginate($limit, ['*'], 'page', $page);
 
         return $query;
     }

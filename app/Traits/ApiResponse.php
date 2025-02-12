@@ -7,9 +7,10 @@ use Illuminate\Http\Response;
 trait ApiResponse
 {
 
-    public function successResponse($data = null, $code = Response::HTTP_OK, $message = null)
+    public function successResponse($data = null, $message = null, $code = Response::HTTP_OK,)
     {
         return response()->json([
+            'status' => 'ok',
             'error' => null,
             'message' => $message,
             'code' => $code,
@@ -17,13 +18,14 @@ trait ApiResponse
         ], $code);
     }
 
-    public function errorResponse($data = null, $code = Response::HTTP_BAD_REQUEST, $error = null, $message = null)
+    public function errorResponse($error = null, $message = null, $code = Response::HTTP_BAD_REQUEST)
     {
         return response()->json([
+            'status' => 'error',
             'error' => $error,
             'message' => $message,
             'code' => $code,
-            'data' => $data
+            'data' => null
         ], $code);
     }
 }

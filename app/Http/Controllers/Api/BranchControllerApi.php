@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Branch\BranchCreateRequest;
 use App\Http\Requests\Branch\BranchUpdateRequest;
+use App\Http\Resources\Branch\BranchPaginationResource;
 use App\Services\BranchService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\Request;
@@ -25,10 +26,11 @@ class BranchControllerApi extends Controller
     {
         $limit = $request->get('limit', 10);
         $search = $request->get('search', null);
+        $page = $request->get('page', 1);
 
-        $branches = $this->branchService->listBranch($limit, $search);
+        $branches = $this->branchService->paginationBranch($limit, $search, $page);
 
-        return $this->successResponse($branches);
+        return $this->successResponse(new BranchPaginationResource($branches));
     }
 
     public function options(Request $request)
@@ -46,7 +48,7 @@ class BranchControllerApi extends Controller
         try {
             $branch = $this->branchService->createBranch($request->validated());
         } catch (\Throwable $th) {
-            return $this->errorResponse(null, Response::HTTP_INTERNAL_SERVER_ERROR, 'Create Failed');
+            return $this->errorResponse(null, 'Create Failed', Response::HTTP_INTERNAL_SERVER_ERROR,);
         }
 
         return $this->successResponse($branch);
@@ -68,7 +70,7 @@ class BranchControllerApi extends Controller
         try {
             $branch = $this->branchService->getBranchById($id);
         } catch (\Throwable $th) {
-            return $this->errorResponse(null, Response::HTTP_INTERNAL_SERVER_ERROR, 'Get Failed');
+            return $this->errorResponse(null, 'Get Failed', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $this->successResponse($branch);
@@ -79,7 +81,7 @@ class BranchControllerApi extends Controller
         try {
             $this->branchService->deleteBranchById($id);
         } catch (\Throwable $th) {
-            return $this->errorResponse(null, Response::HTTP_INTERNAL_SERVER_ERROR, 'Delete Failed');
+            return $this->errorResponse(null, 'Delete Failed', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $this->successResponse(null, Response::HTTP_NO_CONTENT);
