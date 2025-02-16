@@ -21,10 +21,9 @@ class BranchFactory extends Factory
     public function definition(): array
     {
         return [
-            'id' => $this->faker->randomDigit(),
             'uuid' => $this->faker->uuid(),
             'name' => $this->faker->name(),
-            'code' => $this->faker->word(),
+            'code' => $this->faker->unique()->word() . $this->faker->randomNumber(3),
             'address' => $this->faker->address(),
             'phone' => $this->faker->phoneNumber(),
             'email' => $this->faker->email(),

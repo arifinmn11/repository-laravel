@@ -5,6 +5,7 @@ namespace App\Repositories;
 use App\Models\Branch;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Support\Facades\Cache;
 
 class BranchRepository implements BranchIRepository
 {
@@ -23,9 +24,30 @@ class BranchRepository implements BranchIRepository
     }
     public function getList($limit = null, $search = null): Collection
     {
-        $query = Branch::when($search, function ($query, $search) {
-            return $query->where('name', 'like', "%$search%");
-        })->limit($limit)->get();
+        // $query = Branch::when($search, function ($query, $search) {
+        //     return $query->where('name', 'like', "%$search%");
+        // })->limit($limit)->get();
+
+        $query = Cache::remember('branches', 10, function () {
+            return Branch::all();
+            // return Branch::when($search, function ($query, $search) {
+            //     return $query->where(function ($query) use ($search) {
+            //         foreach (Branch::searchAbleFields() as $field) {
+            //             $query->orWhere($field, 'like', "%$search%");
+            //         }
+            //     });
+        });
+
+        // return $query->filter(function ($branch) use ($search) {
+        //     foreach ($branch->toArray() as $value) {
+        //         if (stripos($value, $search) !== false) {
+        //             return true;
+        //         }
+        //     }
+        //     return false;
+        // })->values();  // Reset array keys
+
+
 
         return $query;
     }

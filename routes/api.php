@@ -1,7 +1,6 @@
 <?php
 
 use App\Http\Controllers\Api\AuthControllerApi;
-use App\Http\Controllers\Api\BaseController;
 use App\Http\Controllers\Api\BranchControllerApi;
 use Illuminate\Support\Facades\Route;
 
@@ -14,7 +13,7 @@ Route::post('/auth/login', [AuthControllerApi::class, 'login'])->name('auth.logi
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/branch', [BranchControllerApi::class, 'index'])->name('branch.index');
     Route::post('/branch', [BranchControllerApi::class, 'store'])->name('branch.store');
-    Route::get('/branch/options', [BranchControllerApi::class, 'options'])->name('branch.options');
+    Route::get('/branch_options', [BranchControllerApi::class, 'options'])->name('branch.options');
     Route::match(['put', 'patch'], 'branch/{id}', [BranchControllerApi::class, 'update'])->name('branch.update');
     Route::delete('/branch/{id}', [BranchControllerApi::class, 'destroy'])->name('branch.destroy');
     Route::get('/branch/{id}', [BranchControllerApi::class, 'show'])->name('branch.show');
