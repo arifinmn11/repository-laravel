@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests\Branch;
 
-use Illuminate\Foundation\Http\FormRequest;
+use App\Http\Requests\BaseFormRequest;
 
-class BranchUpdateRequest extends FormRequest
+class BranchUpdateRequest extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

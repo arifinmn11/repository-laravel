@@ -5,6 +5,7 @@ namespace App\Services;
 use App\Models\Branch;
 use App\Repositories\BranchIRepository;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
 
 class BranchService
 {

@@ -8,13 +8,12 @@ use App\Http\Requests\Branch\BranchUpdateRequest;
 use App\Http\Resources\Branch\BranchPaginationResource;
 use App\Services\BranchService;
 use App\Traits\ApiResponse;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
-class BranchControllerApi extends Controller
+class BranchControllerApi extends BaseController
 {
-    use ApiResponse;
-
     protected $branchService;
 
     public function __construct(BranchService $branchService)
@@ -22,7 +21,7 @@ class BranchControllerApi extends Controller
         $this->branchService = $branchService;
     }
 
-    public function index(Request $request)
+    public function index(Request $request): JsonResponse
     {
         $limit = $request->get('limit', 10);
         $search = $request->get('search', null);
@@ -33,7 +32,7 @@ class BranchControllerApi extends Controller
         return $this->successResponse(new BranchPaginationResource($branches));
     }
 
-    public function options(Request $request)
+    public function options(Request $request): JsonResponse
     {
         $limit = $request->get('limit', null);
         $search = $request->get('search', null);
@@ -43,7 +42,7 @@ class BranchControllerApi extends Controller
         return $this->successResponse($branches);
     }
 
-    public function store(BranchCreateRequest $request)
+    public function store(BranchCreateRequest $request): JsonResponse
     {
         try {
             $branch = $this->branchService->createBranch($request->validated());
@@ -54,10 +53,11 @@ class BranchControllerApi extends Controller
         return $this->successResponse($branch);
     }
 
-    public function update(BranchUpdateRequest $request, $id)
+    public function update(BranchUpdateRequest $request, $id): JsonResponse
     {
         try {
             $branch = $this->branchService->updateBranchById($request->validated(), $id);
+
         } catch (\Throwable $th) {
             return $this->errorResponse(null, Response::HTTP_INTERNAL_SERVER_ERROR, 'Update Failed');
         }
@@ -65,7 +65,7 @@ class BranchControllerApi extends Controller
         return $this->successResponse($branch);
     }
 
-    public function show($id)
+    public function show($id): JsonResponse
     {
         try {
             $branch = $this->branchService->getBranchById($id);
@@ -76,7 +76,7 @@ class BranchControllerApi extends Controller
         return $this->successResponse($branch);
     }
 
-    public function destroy($id)
+    public function destroy($id): JsonResponse
     {
         try {
             $this->branchService->deleteBranchById($id);
