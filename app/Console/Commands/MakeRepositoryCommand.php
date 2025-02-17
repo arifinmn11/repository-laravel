@@ -61,7 +61,7 @@ class MakeRepositoryCommand extends Command
 
         namespace App\Repositories;
 
-        class {$name}Repository implements I{$name}Repository
+        class {$name}Repository implements {$name}IRepository
         {
             public function exampleMethod()
             {
