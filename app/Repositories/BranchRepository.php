@@ -21,15 +21,19 @@ class BranchRepository implements BranchIRepository
 
         return $query;
     }
-    public function getList($limit = null, $search = null): Collection
+    public function getList($limit = null, $search = null, $isActive = true): Collection
     {
-        return Branch::when($search, function ($query, $search) {
-            return $query->where(function ($query) use ($search) {
-                foreach (Branch::searchAbleFields() as $field) {
-                    $query->orWhere($field, 'like', "%$search%");
-                }
-            });
-        })->get();
+        $query = Branch::where('is_active', $isActive)
+            ->when($search, function ($query, $search) use ($isActive) {
+                $query->where(function ($query) use ($search) {
+                    foreach (Branch::searchAbleFields() as $field) {
+                        $query->orWhere($field, 'like', "%$search%");
+                    }
+                });
+            })
+            ->get();
+
+        return $query;
     }
     public function create(array $data): Branch
     {

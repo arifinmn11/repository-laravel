@@ -20,7 +20,7 @@ class BranchCreateRequest extends BaseFormRequest
             'address' => 'required|string|max:255',
             'phone' => 'required|string|max:100',
             'email' => 'required|string|max:100',
-            'is_active' => 'nullable|string|max:100',
+            'is_active' => 'nullable|boolean',
         ];
     }
 }

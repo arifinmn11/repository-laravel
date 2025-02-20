@@ -39,8 +39,9 @@ class BranchControllerApi extends BaseController
     {
         $limit = $request->get('limit', null);
         $search = $request->get('search', null);
+        $isActive = $request->get('is_active', true);
 
-        $branches = $this->branchService->listBranch($limit, $search);
+        $branches = $this->branchService->listBranch($limit, $search, $isActive);
 
         return $this->successResponse(new BranchOptionCollection($branches));
     }

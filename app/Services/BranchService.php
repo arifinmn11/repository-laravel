@@ -36,9 +36,9 @@ class BranchService
         return $this->branchRepository->deleteById($id);
     }
 
-    public function listBranch($limit = null, $search = null): Collection
+    public function listBranch($limit = null, $search = null, $isActive = true): Collection
     {
-        return $this->branchRepository->getList($limit, $search);
+        return $this->branchRepository->getList($limit, $search, $isActive);
     }
 
     public function paginationBranch($limit = 10, $search = null, $page = 1): LengthAwarePaginator

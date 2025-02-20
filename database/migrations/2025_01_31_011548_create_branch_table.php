@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('address', 255);
             $table->string('phone', 100)->nullable();
             $table->string('email', 100)->nullable();
-            $table->string('is_active', 100)->default('yes');
+            $table->boolean('is_active', 100);
             $table->string('user_created', 100)->nullable();
             $table->string('user_updated', 100)->nullable();
             $table->timestamps();
