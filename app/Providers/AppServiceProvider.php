@@ -12,8 +12,6 @@ use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
 {
-    use ApiResponse;
-
     /**
      * Register any application services.
      */
@@ -31,13 +29,5 @@ class AppServiceProvider extends ServiceProvider
         // ResetPassword::createUrlUsing(function (object $notifiable, string $token) {
         //     return config('app.frontend_url') . "/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
         // });
-
-        Response::macro('success', function ($data = null, $code = 200, $message = null) {
-            return $this->successResponse($data, $code, $message);
-        });
-
-        Response::macro('error', function ($data = null, $code = 404, $error = null, $message = null) {
-            return $this->errorResponse($data, $code, $error, $message);
-        });
     }
 }

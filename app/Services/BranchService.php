@@ -41,7 +41,7 @@ class BranchService
         return $this->branchRepository->getList($limit, $search);
     }
 
-    public function paginationBranch($limit = 10, $search = null, $page = 1)
+    public function paginationBranch($limit = 10, $search = null, $page = 1): LengthAwarePaginator
     {
         return $this->branchRepository->getPagination($limit, $search, $page);
     }
