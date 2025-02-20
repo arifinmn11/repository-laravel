@@ -11,44 +11,25 @@ class BranchRepository implements BranchIRepository
 {
     public function getPagination($limit = 10, $search = null, $page = 1, $filters = [], $sortBy = 'id|asc'): LengthAwarePaginator
     {
-
         $query = Branch::when($search, function ($query, $search) {
             return $query->where(function ($query) use ($search) {
                 foreach (Branch::searchAbleFields() as $field) {
                     $query->orWhere($field, 'like', "%$search%");
                 }
             });
-        })
-        ->paginate($limit, ['*'], 'page', $page);
+        })->paginate($limit, ['*'], 'page', $page);
 
         return $query;
     }
     public function getList($limit = null, $search = null): Collection
     {
-        // $query = Branch::when($search, function ($query, $search) {
-        //     return $query->where('name', 'like', "%$search%");
-        // })->limit($limit)->get();
-
-        $query = Cache::remember('branches', 10, function () {
-            return Branch::all();
-            // return Branch::when($search, function ($query, $search) {
-            //     return $query->where(function ($query) use ($search) {
-            //         foreach (Branch::searchAbleFields() as $field) {
-            //             $query->orWhere($field, 'like', "%$search%");
-            //         }
-            //     });
+        return Branch::when($search, function ($query, $search) {
+            return $query->where(function ($query) use ($search) {
+                foreach (Branch::searchAbleFields() as $field) {
+                    $query->orWhere($field, 'like', "%$search%");
+                }
+            });
         });
-
-        // return $query->filter(function ($branch) use ($search) {
-        //     foreach ($branch->toArray() as $value) {
-        //         if (stripos($value, $search) !== false) {
-        //             return true;
-        //         }
-        //     }
-        //     return false;
-        // })->values();  // Reset array keys
-
-
 
         return $query;
     }
