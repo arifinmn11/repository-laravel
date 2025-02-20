@@ -9,7 +9,7 @@ use Illuminate\Support\Facades\Cache;
 
 class BranchRepository implements BranchIRepository
 {
-    public function getPagination($limit = 10, $search = null, $page = 1): LengthAwarePaginator
+    public function getPagination($limit = 10, $search = null, $page = 1, $filters = [], $sortBy = 'id|asc'): LengthAwarePaginator
     {
 
         $query = Branch::when($search, function ($query, $search) {
@@ -18,7 +18,8 @@ class BranchRepository implements BranchIRepository
                     $query->orWhere($field, 'like', "%$search%");
                 }
             });
-        })->paginate($limit, ['*'], 'page', $page);
+        })
+        ->paginate($limit, ['*'], 'page', $page);
 
         return $query;
     }
