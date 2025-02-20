@@ -31,6 +31,13 @@ class Branch extends Model
         'id',
     ];
 
+    protected function casts(): array
+    {
+        return [
+            'is_active' => 'boolean',
+        ];
+    }
+
     public static function searchAbleFields(): array
     {
         return ['name', 'code', 'address', 'phone', 'email'];

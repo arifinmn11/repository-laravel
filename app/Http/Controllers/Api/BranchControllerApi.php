@@ -5,7 +5,10 @@ namespace App\Http\Controllers\Api;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Branch\BranchCreateRequest;
 use App\Http\Requests\Branch\BranchUpdateRequest;
+use App\Http\Resources\Branch\BranchOptionCollection;
+use App\Http\Resources\Branch\BranchOptionResource;
 use App\Http\Resources\Branch\BranchPaginationResource;
+use App\Http\Resources\Branch\BranchResource;
 use App\Services\BranchService;
 use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
@@ -39,7 +42,7 @@ class BranchControllerApi extends BaseController
 
         $branches = $this->branchService->listBranch($limit, $search);
 
-        return $this->successResponse($branches);
+        return $this->successResponse(new BranchOptionCollection($branches));
     }
 
     public function store(BranchCreateRequest $request): JsonResponse
@@ -57,7 +60,6 @@ class BranchControllerApi extends BaseController
     {
         try {
             $branch = $this->branchService->updateBranchById($request->validated(), $id);
-
         } catch (\Throwable $th) {
             return $this->errorResponse(null, Response::HTTP_INTERNAL_SERVER_ERROR, 'Update Failed');
         }
@@ -73,7 +75,7 @@ class BranchControllerApi extends BaseController
             return $this->errorResponse(null, 'Get Failed', Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
-        return $this->successResponse($branch);
+        return $this->successResponse(new BranchResource($branch));
     }
 
     public function destroy($id): JsonResponse

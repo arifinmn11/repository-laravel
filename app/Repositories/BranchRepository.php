@@ -29,9 +29,7 @@ class BranchRepository implements BranchIRepository
                     $query->orWhere($field, 'like', "%$search%");
                 }
             });
-        });
-
-        return $query;
+        })->get();
     }
     public function create(array $data): Branch
     {
