@@ -5,6 +5,7 @@ use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
+use Symfony\Component\HttpKernel\Exception\MethodNotAllowedHttpException;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 return Application::configure(basePath: dirname(__DIR__))
@@ -17,6 +18,7 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware) {
         $middleware->api(prepend: [
             \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // 'throttle:api',
         ]);
 
         // $middleware->alias([
@@ -30,7 +32,6 @@ return Application::configure(basePath: dirname(__DIR__))
         ]); // until thiss
     })
     ->withExceptions(function (Exceptions $exceptions) {
-
         $exceptions->renderable(function (NotFoundHttpException $e, $request) {
             if ($request->json())
                 return response()->json([
@@ -43,4 +44,30 @@ return Application::configure(basePath: dirname(__DIR__))
 
             throw $e;
         });
+
+        $exceptions->renderable(function (MethodNotAllowedHttpException $e, $request) {
+            if ($request->json())
+                return response()->json([
+                    'status' => 'error',
+                    'error' => null,
+                    'message' => 'Method not allowed',
+                    'code' => 405,
+                    'data' => null
+                ], 405);
+
+            throw $e;
+        });
+
+        // $exceptions->renderable(function (Exception $e, $request) {
+        //     if ($request->json())
+        //         return response()->json([
+        //             'status' => 'error',
+        //             'error' => null,
+        //             'message' => 'Internal Server Error',
+        //             'code' => 500,
+        //             'data' => null
+        //         ], 500);
+
+        //     throw $e;
+        // });
     })->create();

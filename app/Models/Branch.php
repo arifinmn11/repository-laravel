@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Laravel\Scout\Searchable;
 
-class Branch extends Model
+class Branch extends BaseModel
 {
     use Uuid, HasFactory;
 

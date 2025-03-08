@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Api\v1;
 
+use App\Http\Controllers\Api\BaseController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Branch\BranchCreateRequest;
 use App\Http\Requests\Branch\BranchUpdateRequest;
@@ -28,9 +29,19 @@ class BranchControllerApi extends BaseController
     {
         $limit = $request->get('limit', 10);
         $search = $request->get('search', null);
-        $page = $request->get('page', 1);
+        $sortBy = $request->get('sort_by', 'id|asc');
 
-        $branches = $this->branchService->paginationBranch($limit, $search, $page);
+        $filters = [];
+        $filters['name'] = $request->get('name', null);
+        $filters['address'] = $request->get('address', null);
+        $filters['phone'] = $request->get('phone', null);
+        $filters['email'] = $request->get('email', null);
+        $filters['is_active'] = $request->get('is_active', true);
+
+        $customFilters = [];
+        $customFilters['names'] = $request->get('names', null) ? explode(',', $request->get('names')) : null;
+
+        $branches = $this->branchService->getPaginatedBranches($limit, $search, $sortBy, $filters, $customFilters);
 
         return $this->successResponse(new BranchPaginationResource($branches));
     }

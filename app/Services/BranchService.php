@@ -41,8 +41,18 @@ class BranchService
         return $this->branchRepository->getList($limit, $search, $isActive);
     }
 
-    public function paginationBranch($limit = 10, $search = null, $page = 1): LengthAwarePaginator
+    public function paginationBranch($limit = 10, $search = '', $page = 1): LengthAwarePaginator
     {
+        // $this->branchRepository->applyFilters([]);
+        // return $this->branchRepository->applySearchKeyword($search)->paginate();
+        // return $this->branchRepository->applySortBy('id|asc')->paginate();
+        // dd(return $this->branchRepository::paginate());
+
         return $this->branchRepository->getPagination($limit, $search, $page);
+    }
+
+    public function getPaginatedBranches(int $limit = 10, ?string $search = null, string $sortBy = 'id|asc', $filters = [], $customFilters): LengthAwarePaginator
+    {
+        return $this->branchRepository->getPaginatedBranches($limit, $search, $sortBy, $filters, $customFilters);
     }
 }

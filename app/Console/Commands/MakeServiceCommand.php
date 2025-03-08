@@ -34,13 +34,51 @@ class MakeServiceCommand extends Command
 
 namespace App\Services;
 
+use App\Models\{{name}};
+use App\Repositories\{{name}}IRepository;
+use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class {{name}}Service
 {
-    public function exampleMethod()
+    protected \$repository;
+
+    public function __construct({{name}}IRepository \$repository)
     {
-        return "Hello from {{name}}Service!";
+        \$this->repository = \$repository;
+    }
+
+    public function get{{name}}ById(\$id): {{name}}
+    {
+        return \$this->repository->findById(\$id);
+    }
+
+    public function create{{name}}(array \$data): {{name}}
+    {
+        return \$this->repository->create(\$data);
+    }
+
+    public function update{{name}}ById(array \$data, \$id): {{name}}
+    {
+        return \$this->repository->updateById(\$data, \$id);
+    }
+
+    public function delete{{name}}ById(\$id): bool
+    {
+        return \$this->repository->deleteById(\$id);
+    }
+
+    public function list{{name}}(\$limit = null, \$search = null, \$isActive = true): Collection
+    {
+        return \$this->repository->getList(\$limit, \$search, \$isActive);
+    }
+
+    public function getPagination(int \$limit = 10, ?string \$search = null, string \$sortBy = 'id|asc', \$filters = [], \$customFilters): LengthAwarePaginator
+    {
+        return \$this->repository->getPagination(\$limit, \$search, \$sortBy, \$filters, \$customFilters);
     }
 }
+
 PHP;
     }
 }
