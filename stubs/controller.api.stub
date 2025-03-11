@@ -1,0 +1,102 @@
+<?php
+
+namespace App\Http\Controllers\Api\v1;
+
+use App\Http\Controllers\Api\BaseController;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\{{ class }}\{{ class }}CreateRequest;
+use App\Http\Requests\{{ class }}\{{ class }}UpdateRequest;
+use App\Http\Resources\{{ class }}\{{ class }}OptionCollection;
+use App\Http\Resources\{{ class }}\{{ class }}OptionResource;
+use App\Http\Resources\{{ class }}\{{ class }}PaginationResource;
+use App\Http\Resources\{{ class }}\{{ class }}Resource;
+use App\Services\{{ class }}Service;
+use App\Traits\ApiResponse;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+
+class {{ class }}ControllerApi extends BaseController
+{
+    protected $service;
+
+    public function __construct({{ class }}Service $service)
+    {
+        $this->service = $service;
+    }
+
+    public function index(Request $request): JsonResponse
+    {
+        $limit = $request->get('limit', 10);
+        $search = $request->get('search', null);
+        $sortBy = $request->get('sort_by', 'id|asc');
+
+        $filters = [];
+        //Ex:
+        //$filters['name'] = $request->get('name', null);
+        //$filters['is_active'] = $request->get('is_active', true);
+
+        $customFilters = [];
+        //Ex:
+        //$customFilters['names'] = $request->get('names', null) ? explode(',', $request->get('names')) : null;
+
+        $results = $this->service->getPaginated{{ class }}s($limit, $search, $sortBy, $filters, $customFilters);
+
+        return $this->successResponse(new {{ class }}PaginationResource($results));
+    }
+
+    public function options(Request $request): JsonResponse
+    {
+        $limit = $request->get('limit', null);
+        $search = $request->get('search', null);
+        $isActive = $request->get('is_active', true);
+
+        $results = $this->service->list{{ class }}($limit, $search, $isActive);
+
+        return $this->successResponse(new {{ class }}OptionCollection($results));
+    }
+
+    public function store({{ class }}CreateRequest $request): JsonResponse
+    {
+        try {
+            $result = $this->service->create{{ class }}($request->validated());
+        } catch (\Throwable $th) {
+            return $this->errorResponse(null, 'Create Failed', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->successResponse($result);
+    }
+
+    public function update({{ class }}UpdateRequest $request, $id): JsonResponse
+    {
+        try {
+            $result = $this->service->update{{ class }}ById($request->validated(), $id);
+        } catch (\Throwable $th) {
+            return $this->errorResponse(null, 'Update Failed', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->successResponse($result);
+    }
+
+    public function show($id): JsonResponse
+    {
+        try {
+            $result = $this->service->get{{ class }}ById($id);
+        } catch (\Throwable $th) {
+            return $this->errorResponse(null, 'Get Failed', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->successResponse(new {{ class }}Resource($result));
+    }
+
+    public function destroy($id): JsonResponse
+    {
+        try {
+            $this->service->delete{{ class }}ById($id);
+        } catch (\Throwable $th) {
+            return $this->errorResponse(null, 'Delete Failed', Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->successResponse(null, Response::HTTP_NO_CONTENT);
+    }
+}

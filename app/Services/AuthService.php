@@ -3,7 +3,9 @@
 namespace App\Services;
 
 use App\Http\Resources\LoginResponse;
+use App\Models\User;
 use App\Repositories\UserIRepository;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
 class AuthService
@@ -30,5 +32,31 @@ class AuthService
         ];
 
         return new LoginResponse($result);
+    }
+
+    public function createUser(array $data): User
+    {
+        try {
+            $result = $this->userRepository->create($data);
+
+            $result->assignRole($data['roles']);
+        } catch (\Throwable $th) {
+            throw new \Exception('Create failed');
+        }
+        return $result;
+    }
+
+    public function updateUserRoles(array $data, $id): User
+    {
+        try {
+
+            $result = $this->userRepository->findById($id);
+
+            $result->syncRoles($data['roles']);
+
+            return $result;
+        } catch (\Throwable $th) {
+            throw new \Exception('Update failed');
+        }
     }
 }
