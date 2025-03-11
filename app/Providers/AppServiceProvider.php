@@ -3,11 +3,16 @@
 namespace App\Providers;
 
 use App\Traits\ApiResponse;
+use Dedoc\Scramble\Scramble;
+use Dedoc\Scramble\Support\Generator\OpenApi;
+use Dedoc\Scramble\Support\Generator\SecurityScheme;
 use Illuminate\Auth\Notifications\ResetPassword;
 use Illuminate\Support\Facades\Response;
 use Illuminate\Support\ServiceProvider;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Str;
+use Illuminate\Routing\Route;
 
 
 
@@ -34,6 +39,11 @@ class AppServiceProvider extends ServiceProvider
         //     return config('app.frontend_url') . "/password-reset/$token?email={$notifiable->getEmailForPasswordReset()}";
         // });
 
+        Scramble::extendOpenApi(function (OpenApi $openApi) {
+            $openApi->secure(
+                SecurityScheme::http('bearer', 'JWT')
+            );
+        });
 
         // Ensure Laravel uses our custom stub for controllers
         Artisan::command('make:controller {name}', function ($name) {

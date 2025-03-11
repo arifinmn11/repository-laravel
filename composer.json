@@ -8,6 +8,8 @@
     "require": {
         "php": "^8.2",
         "benbjurstrom/prezet": "1.0.0-rc5",
+        "dedoc/scramble": "^0.12.11",
+        "doctrine/dbal": "^4.2",
         "laravel/framework": "^11.31",
         "laravel/sanctum": "^4.0",
         "laravel/scout": "^10.12",
