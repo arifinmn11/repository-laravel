@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Api\v1;
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\LoginRequest;
+use App\Http\Requests\Auth\UserRegisterRequest;
 use App\Http\Requests\Auth\UserRoleUpdateRequest;
 use App\Http\Resources\LoginResponse;
 use App\Http\Resources\UserRegisterResource;
@@ -32,7 +33,7 @@ class AuthControllerApi extends BaseController
     // public function register(Request $request): JsonResponse {}
 
     /**
-     * Login api
+     * Login
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,7 +42,11 @@ class AuthControllerApi extends BaseController
 
         $loginRequest = $request->validated();
 
-        $result = $this->authService->createToken($loginRequest);
+        try {
+            $result = $this->authService->createToken($loginRequest);
+        } catch (\Throwable $th) {
+            return $this->errorResponse(null, 'Failed to login!', 401);
+        }
 
         if (!$result) {
             return $this->errorResponse(null, 'Email or password is not valid!', 401);
@@ -50,6 +55,11 @@ class AuthControllerApi extends BaseController
         return $this->successResponse(new LoginResponse($result));
     }
 
+    /**
+     * Register
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function register(UserRegisterRequest $request): JsonResponse
     {
 
@@ -70,17 +80,26 @@ class AuthControllerApi extends BaseController
         return $this->successResponse(new UserRegisterResource($result));
     }
 
+    /**
+     * Update User Role
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function updateUserRole(UserRoleUpdateRequest $request, $id): JsonResponse
     {
         $validated = $request->validated();
-
-        dd($validated);
 
         $result = $this->authService->updateUserRoles($validated, $id);
 
         return $this->successResponse($result, 'Successfully logged out');
     }
 
+
+    /**
+     * Logout api
+     *
+     * @return \Illuminate\Http\Response
+     */
     public function logout(Request $request): JsonResponse
     {
         $request->user()->currentAccessToken()->delete();

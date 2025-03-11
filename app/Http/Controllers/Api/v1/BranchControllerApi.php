@@ -16,6 +16,13 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+
+// /**
+//  * Register api
+//  *
+//  * @return \Illuminate\Http\Response
+//  */
+// public function register(Request $request): JsonResponse {}
 class BranchControllerApi extends BaseController
 {
     protected $branchService;

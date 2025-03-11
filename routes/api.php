@@ -25,8 +25,7 @@ Route::prefix('/v1')->group(function () {
         Route::get('role/{id}', [RoleControllerApi::class, 'show'])->name('role.show');
         Route::match(['put', 'patch'], 'role/{id}', [RoleControllerApi::class, 'update'])->name('role.update');
 
-        Route::get('/branch', [BranchControllerApi::class, 'index'])->name('branch.index')
-        ->middleware('permission:branch-index');
+        Route::get('/branch', [BranchControllerApi::class, 'index'])->name('branch.index')->middleware('permission:branch-index');
         Route::post('/branch', [BranchControllerApi::class, 'store'])->name('branch.store');
         Route::get('/branch_options', [BranchControllerApi::class, 'options'])->name('branch.options');
         Route::match(['put', 'patch'], 'branch/{id}', [BranchControllerApi::class, 'update'])->name('branch.update');
