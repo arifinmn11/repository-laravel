@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Api\BaseController;
-use App\Http\Controllers\Controller;
 use App\Http\Requests\{{ class }}\{{ class }}CreateRequest;
 use App\Http\Requests\{{ class }}\{{ class }}UpdateRequest;
 use App\Http\Resources\{{ class }}\{{ class }}OptionCollection;
@@ -11,7 +10,6 @@ use App\Http\Resources\{{ class }}\{{ class }}OptionResource;
 use App\Http\Resources\{{ class }}\{{ class }}PaginationResource;
 use App\Http\Resources\{{ class }}\{{ class }}Resource;
 use App\Services\{{ class }}Service;
-use App\Traits\ApiResponse;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -40,7 +38,7 @@ class {{ class }}ControllerApi extends BaseController
         //Ex:
         //$customFilters['names'] = $request->get('names', null) ? explode(',', $request->get('names')) : null;
 
-        $results = $this->service->getPaginated{{ class }}s($limit, $search, $sortBy, $filters, $customFilters);
+        $results = $this->service->getPagination($limit, $search, $sortBy, $filters, $customFilters);
 
         return $this->successResponse(new {{ class }}PaginationResource($results));
     }

@@ -36,9 +36,6 @@ class AppServiceProvider extends ServiceProvider
 
 
         // Ensure Laravel uses our custom stub for controllers
-
-
-
         Artisan::command('make:controller {name}', function ($name) {
             // Define stub path
             $stubPath = base_path('stubs/controller.api.stub'); // Adjust if needed
@@ -55,6 +52,11 @@ class AppServiceProvider extends ServiceProvider
                 File::makeDirectory($directory, 0777, true, true);
             }
 
+            if (File::exists($controllerPath)) {
+                $this->error("Controller {$name} already exists at {$controllerPath}");
+                return;
+            }
+
             // Read the stub
             $stub = File::get($stubPath);
 
@@ -67,6 +69,12 @@ class AppServiceProvider extends ServiceProvider
 
             // Write the final controller file
             File::put($controllerPath, $stub);
+
+            Artisan::call('make:request', ['name' => $className . '/' . $className . 'CreateRequest']);
+            Artisan::call('make:request', ['name' => $className . '/' . $className . 'UpdateRequest']);
+            Artisan::call('make:resource', ['name' => $className . '/' . $className . 'TestResource']);
+            Artisan::call('make:resource', ['name' => $className . '/' . $className . 'PaginationResource']);
+            Artisan::call('make:resource', ['name' => $className . '/' . $className . 'OptionCollection']);
 
             $this->info("Controller {$name} created successfully at {$controllerPath}");
         })->describe('Create a new API controller using a custom stub.');
