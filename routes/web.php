@@ -12,3 +12,5 @@ Route::get('/', function () {
 // })->where('catchall', '.*');
 
 require __DIR__ . '/auth.php';
+
+require __DIR__.'/prezet.php';
