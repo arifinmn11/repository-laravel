@@ -8,21 +8,28 @@ use App\Http\Requests\Auth\LoginRequest;
 use App\Http\Requests\Auth\UserRegisterRequest;
 use App\Http\Requests\Auth\UserRoleUpdateRequest;
 use App\Http\Resources\LoginResponse;
+use App\Http\Resources\User\UserRoleResource;
 use App\Http\Resources\UserRegisterResource;
 use App\Repositories\UserIRepository;
 use App\Services\AuthService;
+use App\Services\MenuService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 class AuthControllerApi extends BaseController
 {
 
     protected $authService;
+    protected $menuService;
 
-    public function __construct(AuthService $authService)
-    {
+    public function __construct(
+        AuthService $authService,
+        MenuService $menuService
+    ) {
         $this->authService = $authService;
+        $this->menuService = $menuService;
     }
 
     // /**
@@ -89,9 +96,12 @@ class AuthControllerApi extends BaseController
     {
         $validated = $request->validated();
 
-        $result = $this->authService->updateUserRoles($validated, $id);
-
-        return $this->successResponse($result, 'Successfully logged out');
+        try {
+            $result = $this->authService->updateUserRoles($validated, $id);
+        } catch (\Throwable $th) {
+            return $this->errorResponse(null, 'Failed to update user role!', 401);
+        }
+        return $this->successResponse(new UserRoleResource($result), 'Successfully logged out');
     }
 
 
@@ -105,5 +115,19 @@ class AuthControllerApi extends BaseController
         $request->user()->currentAccessToken()->delete();
 
         return $this->successResponse(null, 'Successfully logged out');
+    }
+
+
+    public function getMenus()
+    {
+        try {
+            $user = Auth::user();
+
+            $result = $this->menuService->listMenuDetailByUser($user);
+
+            return $this->successResponse($result);
+        } catch (\Throwable $th) {
+            return $this->errorResponse(null, 'Failed to get menus!', 401);
+        }
     }
 }

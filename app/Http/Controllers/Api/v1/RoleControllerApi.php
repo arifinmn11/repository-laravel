@@ -4,6 +4,8 @@ namespace App\Http\Controllers\Api\v1;
 
 use App\Http\Controllers\Api\BaseController;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Auth\UserRoleUpdateRequest;
+use App\Http\Requests\Role\RolePermissionUpdate;
 use App\Http\Requests\RoleCreateRequest;
 use App\Http\Resources\Role\RoleResource;
 use App\Services\RoleService;
@@ -43,16 +45,14 @@ class RoleControllerApi extends BaseController
         ]);
     }
 
-    public function update(Request $request, $id)
+    public function update(RolePermissionUpdate $request, $id)
     {
-        $data = $request->all();
 
         try {
+            $data = $request->validated();
 
             $role = $this->roleService->updateRoleById($data, $id);
-
         } catch (\Throwable $th) {
-
             return $this->errorResponse($th->getMessage());
         }
         return $this->successResponse(new RoleResource($role), 'Role created successfully');

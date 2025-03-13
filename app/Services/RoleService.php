@@ -42,7 +42,6 @@ class RoleService
 
         $result = $this->repository->updateById($data, $id);
 
-
         $permissionsID = array_map(
             function ($value) {
                 return (int)$value;

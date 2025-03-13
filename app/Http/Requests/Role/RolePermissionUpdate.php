@@ -1,11 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Auth;
+namespace App\Http\Requests\Role;
 
 use App\Http\Requests\BaseFormRequest;
-use Illuminate\Foundation\Http\FormRequest;
 
-class UserRoleUpdateRequest extends BaseFormRequest
+class RolePermissionUpdate extends BaseFormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -23,7 +22,8 @@ class UserRoleUpdateRequest extends BaseFormRequest
     public function rules(): array
     {
         return [
-            'roles' => 'required|array'
+            'name' => 'required|string|unique:roles,name,' . $this->id,
+            'permission' => 'required|array'
         ];
     }
 }

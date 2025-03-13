@@ -19,13 +19,15 @@ Route::prefix('/v1')->group(function () {
     Route::post('/auth/register', [AuthControllerApi::class, 'register'])->name('auth.register');
 
     Route::middleware('auth:sanctum')->group(function () {
-        Route::match(['put','patch'], '/auth/role/{id}', [AuthControllerApi::class, 'updateUserRole'])->name('auth.update-user-role');
+        Route::get('/auth-menus', [AuthControllerApi::class, 'getMenus'])->name('auth.get-menus');
+        Route::match(['put', 'patch'], '/auth-role/{id}', [AuthControllerApi::class, 'updateUserRole'])->name('auth.update-user-role');
+        // Route::get('/auth-logout', [AuthControllerApi::class, 'logout'])->name('auth.logout');
 
-        Route::post('role', [RoleControllerApi::class, 'create'])->name('role.create');
-        Route::get('role/{id}', [RoleControllerApi::class, 'show'])->name('role.show');
-        Route::match(['put', 'patch'], 'role/{id}', [RoleControllerApi::class, 'update'])->name('role.update');
+        Route::post('/role', [RoleControllerApi::class, 'create'])->name('role.create');
+        Route::get('/role/{id}', [RoleControllerApi::class, 'show'])->name('role.show');
+        Route::match(['put', 'patch'], '/role/{id}', [RoleControllerApi::class, 'update'])->name('role.update');
 
-        Route::get('/branch', [BranchControllerApi::class, 'index'])->name('branch.index')->middleware('permission:branch-index');
+        Route::get('/branch', [BranchControllerApi::class, 'index'])->name('branch.index')->middleware('permission:branch-index'); //Ex: middleware
         Route::post('/branch', [BranchControllerApi::class, 'store'])->name('branch.store');
         Route::get('/branch_options', [BranchControllerApi::class, 'options'])->name('branch.options');
         Route::match(['put', 'patch'], 'branch/{id}', [BranchControllerApi::class, 'update'])->name('branch.update');
