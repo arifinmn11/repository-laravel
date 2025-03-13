@@ -7,7 +7,7 @@
 
 <x-prezet::template>
     @seo([
-        'title' => 'Prezet: Markdown Blogging for Laravel',
+        'title' => 'Remedis DOC',
         'description' =>
             'Transform your markdown files into SEO-friendly blogs, articles, and documentation!',
         'url' => route('prezet.index'),
@@ -21,12 +21,12 @@
                 <h1
                     class="font-display text-4xl font-bold tracking-tight text-gray-900"
                 >
-                    Prezet Blog
+                    Remedis Info
                 </h1>
 
                 <div class="justify-between sm:flex">
                     <p class="text-lg leading-7 text-gray-500">
-                        A blog created with Laravel and Tailwind.css
+                        Rule and Documentation System
                     </p>
                     <div class="mt-4 block sm:mt-0">
                         @if ($currentTag)

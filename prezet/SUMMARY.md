@@ -1,15 +1,17 @@
 ## 🎉 Getting Started
 
 - [Configuration](content/configuration)
-- [Sqlite Index](content/index)
+- [Document API](../docs/api)
 
-## 😎 Features
+## 🤝 Rules
 
--  [Markdown Powered](content/features/markdown)
--  [Blade Components](content/features/blade)
--  [Optimized Images](content/features/images)
--  [Typed Frontmatter](content/features/frontmatter)
--  [SEO Tags](content/features/seo)
--  [JSON-LD](content/features/jsonld)
--  [Ogimage Generation](content/features/ogimage)
--  [Sitemap Generation](content/features/sitemap)
+- [Rule Code](content/rules/rule_code)
+- [Rule Git](content/rules/rule_git)
+- [Structure, Command and Repository Service](content/rules/repository_service)
+
+## 📖 Fetures
+
+- [Module Master](content/features/)
+- [Module Setting](content/features/)
+- [Module Operasional](content/features/)
+- [Module RME](content/features/)
